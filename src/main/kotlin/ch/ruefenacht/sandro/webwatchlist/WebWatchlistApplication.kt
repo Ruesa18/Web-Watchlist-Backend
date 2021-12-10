@@ -1,4 +1,4 @@
-package ch.ruefenacht.sandro.animewebwatchlist
+package ch.ruefenacht.sandro.webwatchlist
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

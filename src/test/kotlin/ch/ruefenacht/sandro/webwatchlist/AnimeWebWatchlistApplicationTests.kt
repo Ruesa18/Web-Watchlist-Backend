@@ -1,4 +1,4 @@
-package ch.ruefenacht.sandro.animewebwatchlist
+package ch.ruefenacht.sandro.webwatchlist
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

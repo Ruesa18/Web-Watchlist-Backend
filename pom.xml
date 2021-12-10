@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ch.ruefenacht.sandro</groupId>
-	<artifactId>anime-web-watchlist</artifactId>
+	<artifactId>web-watchlist</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>anime-web-watchlist</name>
+	<name>web-watchlist</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
