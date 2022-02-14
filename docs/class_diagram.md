@@ -8,7 +8,7 @@ classDiagram
     UserData : String password
     UserData : Set<Media> favorites
     UserData : Set<Watched> watched
-    UserData : Set<Media> watchList
+    UserData : Set<Media> watchlist
     
     Media <|-- Movie
     Movie : String name

@@ -1,5 +1,6 @@
 package ch.ruefenacht.sandro.webwatchlist.service;
 
+import ch.ruefenacht.sandro.webwatchlist.model.Media;
 import ch.ruefenacht.sandro.webwatchlist.model.UserData;
 import ch.ruefenacht.sandro.webwatchlist.repository.UserDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,15 @@ public class UserService {
 
     public Optional<UserData> findById(UUID uuid) {
         return userDataRepository.findById(uuid);
+    }
+
+    public void addToWatchlist(UserData user, Media media) {
+        user.getWatchlist().add(media);
+        userDataRepository.save(user);
+    }
+
+    public void addToFavorites(UserData user, Media media) {
+        user.getFavorites().add(media);
+        userDataRepository.save(user);
     }
 }
