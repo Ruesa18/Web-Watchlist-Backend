@@ -15,4 +15,5 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Movie extends Media {
     protected String name;
+    protected String imageUrl;
 }

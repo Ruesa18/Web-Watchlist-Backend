@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface MovieRepository extends JpaRepository<Movie, UUID> {
 
     List<Movie> findByNameContaining(String name);
+
+    List<Movie> findByOrderByNameAsc();
 }

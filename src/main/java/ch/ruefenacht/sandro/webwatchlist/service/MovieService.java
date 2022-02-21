@@ -4,9 +4,7 @@ import ch.ruefenacht.sandro.webwatchlist.model.Movie;
 import ch.ruefenacht.sandro.webwatchlist.repository.MovieRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class MovieService {
@@ -15,8 +13,8 @@ public class MovieService {
 
     public MovieService(MovieRepository movieRepository) {this.movieRepository = movieRepository;}
 
-    public Set<Movie> getAll() {
-        return new HashSet<>(movieRepository.findAll());
+    public List<Movie> getAll() {
+        return movieRepository.findByOrderByNameAsc();
     }
 
     public void save(Movie movie) {
