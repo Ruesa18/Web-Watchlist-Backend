@@ -19,7 +19,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/movie")
@@ -30,26 +29,18 @@ public class MovieController {
 
     @GetMapping
     public ResponseEntity<List<MovieShowDto>> getAll() {
-        List<MovieShowDto> movieShowDtos = this.movieService.getAll().stream()
-                .map(movie -> new MovieShowDto(movie.getId(), movie.getName(), movie.getImageUrl()))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(movieShowDtos);
+        return ResponseEntity.ok(this.movieService.getAll());
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<?> findByName(@PathVariable String name) {
-        List<Movie> movies = this.movieService.findByName(name);
+        List<MovieShowDto> movies = this.movieService.findByName(name);
 
         if(movies.size() == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        List<MovieShowDto> movieShowDtos = movies.stream()
-                .map(movie -> new MovieShowDto(movie.getId(), movie.getName(), movie.getImageUrl()))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(movieShowDtos);
+        return ResponseEntity.ok(movies);
     }
 
     @PostMapping
@@ -82,8 +73,8 @@ public class MovieController {
             }
         }
 
-        this.movieService.save(movie);
+        MovieShowDto user = this.movieService.save(movie);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new MovieShowDto(movie.getId(), movie.getName(), movie.getImageUrl()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 }

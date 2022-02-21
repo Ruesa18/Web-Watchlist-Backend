@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -22,27 +21,19 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private MediaService mediaService;
-
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable UUID id) {
-        Optional<UserData> user = this.userService.findById(id);
+        Optional<UserShowDto> user = this.userService.findById(id);
 
-        if(user.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if(user.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(user);
         }
-
-        return ResponseEntity.status(HttpStatus.OK).body(new UserShowDto(user.get().getId(), user.get().getUsername(), user.get().getFirstname(), user.get().getLastname(), user.get().getEmail(), user.get().getFavoritesAsDto(), user.get().getWatchlistAsDto()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping
     public ResponseEntity<List<UserShowDto>> getAll() {
-        List<UserShowDto> userDtos = this.userService.getAll().stream()
-                .map(user -> new UserShowDto(user.getId(), user.getUsername(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getFavoritesAsDto(), user.getWatchlistAsDto()))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(userDtos);
+        return ResponseEntity.ok(this.userService.getAll());
     }
 
     @PostMapping
@@ -54,50 +45,32 @@ public class UserController {
         user.setLastname(createDto.getLastname());
         user.setEmail(createDto.getEmail());
 
-        this.userService.save(user);
+        UserShowDto userShowDto = this.userService.save(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new UserShowDto(user.getId(), user.getUsername(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getFavoritesAsDto(), user.getWatchlistAsDto()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userShowDto);
     }
 
     @PostMapping("/{userId}/watchlist")
     public ResponseEntity<UserShowDto> addEntryToWatchlist(@PathVariable UUID userId, @RequestBody WatchlistEntryCreateDto watchlistEntryCreateDto) {
-        UUID id = watchlistEntryCreateDto.getId();
+        UUID mediaId = watchlistEntryCreateDto.getId();
 
-        Optional<? extends Media> media = this.mediaService.findMediaById(id);
+        Optional<UserShowDto> userShowDto = this.userService.addToWatchlist(userId, mediaId);
 
-        if(media.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+        if(userShowDto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userShowDto.get());
         }
-
-        Optional<UserData> user = this.userService.findById(userId);
-
-        if(user.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        this.userService.addToWatchlist(user.get(), media.get());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(new UserShowDto(user.get().getId(), user.get().getUsername(), user.get().getFirstname(), user.get().getLastname(), user.get().getEmail(), user.get().getFavoritesAsDto(), user.get().getWatchlistAsDto()));
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/{userId}/favorites")
     public ResponseEntity<UserShowDto> addEntryToFavorites(@PathVariable UUID userId, @RequestBody FavoritesEntryCreateDto favoritesEntryCreateDto) {
-        UUID id = favoritesEntryCreateDto.getId();
+        UUID mediaId = favoritesEntryCreateDto.getId();
 
-        Optional<? extends Media> media = this.mediaService.findMediaById(id);
+        Optional<UserShowDto> userShowDto = this.userService.addToFavorites(userId, mediaId);
 
-        if(media.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+        if(userShowDto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userShowDto.get());
         }
-
-        Optional<UserData> user = this.userService.findById(userId);
-
-        if(user.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        this.userService.addToFavorites(user.get(), media.get());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(new UserShowDto(user.get().getId(), user.get().getUsername(), user.get().getFirstname(), user.get().getLastname(), user.get().getEmail(), user.get().getFavoritesAsDto(), user.get().getWatchlistAsDto()));
+        return ResponseEntity.badRequest().build();
     }
 }
