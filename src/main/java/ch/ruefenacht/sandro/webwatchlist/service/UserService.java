@@ -1,6 +1,5 @@
 package ch.ruefenacht.sandro.webwatchlist.service;
 
-import ch.ruefenacht.sandro.webwatchlist.dto.MediaShowDto;
 import ch.ruefenacht.sandro.webwatchlist.dto.UserShowDto;
 import ch.ruefenacht.sandro.webwatchlist.model.Media;
 import ch.ruefenacht.sandro.webwatchlist.model.Movie;
@@ -62,7 +61,11 @@ public class UserService {
         Optional<Movie> movieOptional = this.movieRepository.findById(mediaId);
         if(movieOptional.isEmpty()) {
             Optional<Series> seriesOptional = this.seriesRepository.findById(mediaId);
-            media = seriesOptional.get();
+            if(seriesOptional.isPresent()) {
+                media = seriesOptional.get();
+            }else{
+                return Optional.empty();
+            }
         }else{
             media = movieOptional.get();
         }
@@ -84,7 +87,12 @@ public class UserService {
         Optional<Movie> movieOptional = this.movieRepository.findById(mediaId);
         if(movieOptional.isEmpty()) {
             Optional<Series> seriesOptional = this.seriesRepository.findById(mediaId);
-            media = seriesOptional.get();
+
+            if(seriesOptional.isPresent()) {
+                media = seriesOptional.get();
+            }else{
+                return Optional.empty();
+            }
         }else{
             media = movieOptional.get();
         }

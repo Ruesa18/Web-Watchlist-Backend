@@ -1,9 +1,7 @@
 package ch.ruefenacht.sandro.webwatchlist.controller;
 
 import ch.ruefenacht.sandro.webwatchlist.dto.*;
-import ch.ruefenacht.sandro.webwatchlist.model.Media;
 import ch.ruefenacht.sandro.webwatchlist.model.UserData;
-import ch.ruefenacht.sandro.webwatchlist.service.MediaService;
 import ch.ruefenacht.sandro.webwatchlist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
