@@ -31,7 +31,7 @@ public class UserData {
     @Column(length = 50, nullable = false)
     protected String lastname;
 
-    @Column(length = 320)
+    @Column(length = 320, unique = true)
     protected String email;
 
     @Lob
