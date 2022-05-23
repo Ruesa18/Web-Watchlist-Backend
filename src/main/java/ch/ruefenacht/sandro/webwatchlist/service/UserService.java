@@ -1,5 +1,7 @@
 package ch.ruefenacht.sandro.webwatchlist.service;
 
+import ch.ruefenacht.sandro.webwatchlist.dto.MediaShowDto;
+import ch.ruefenacht.sandro.webwatchlist.dto.MovieShowDto;
 import ch.ruefenacht.sandro.webwatchlist.dto.UserShowDto;
 import ch.ruefenacht.sandro.webwatchlist.model.Media;
 import ch.ruefenacht.sandro.webwatchlist.model.Movie;
@@ -105,5 +107,17 @@ public class UserService {
             return Optional.of(new UserShowDto(user.getId(), user.getUsername(), user.getFirstname(), user.getLastname(), user.getEmail(), user.getFavoritesAsDto(), user.getWatchlistAsDto()));
         }
         return Optional.empty();
+    }
+
+    public List<MovieShowDto> getAllFavorites(UserShowDto user) {
+        List<MovieShowDto> movieShowDtos = new ArrayList<>();
+        for(MediaShowDto movieShowDto : user.getFavorites()) {
+            Optional<Movie> movieOptional = this.movieRepository.findById(movieShowDto.getUuid());
+            if(movieOptional.isPresent()) {
+                Movie movie = movieOptional.get();
+                movieShowDtos.add(new MovieShowDto(movie.getId(), movie.getName(), movie.getImageUrl()));
+            }
+        }
+        return movieShowDtos;
     }
 }

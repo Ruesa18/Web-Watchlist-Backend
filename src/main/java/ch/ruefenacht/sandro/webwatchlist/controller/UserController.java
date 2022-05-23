@@ -71,4 +71,15 @@ public class UserController {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/{userId}/favorites")
+    public ResponseEntity<List<MovieShowDto>> getFavorites(@PathVariable UUID userId) {
+        Optional<UserShowDto> user = this.userService.findById(userId);
+
+        if(user.isPresent()) {
+            List<MovieShowDto> favorites = this.userService.getAllFavorites(user.get());
+            return ResponseEntity.status(HttpStatus.OK).body(favorites);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 }
