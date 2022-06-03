@@ -38,10 +38,10 @@ public class UserController {
     public ResponseEntity<UserShowDto> createUser(@RequestBody UserCreateDto createDto) {
         UserData user = new UserData();
 
-        user.setUsername(createDto.getUsername());
         user.setFirstname(createDto.getFirstname());
         user.setLastname(createDto.getLastname());
         user.setEmail(createDto.getEmail());
+        user.setPassword(createDto.getPassword());
 
         UserShowDto userShowDto = this.userService.save(user);
 

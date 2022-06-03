@@ -22,17 +22,17 @@ public class UserData {
     @GeneratedValue
     protected UUID id;
 
-    @Column(length = 100, unique = true, nullable = false)
-    protected String username;
-
     @Column(length = 50, nullable = false)
     protected String firstname;
 
     @Column(length = 50, nullable = false)
     protected String lastname;
 
-    @Column(length = 320, unique = true)
+    @Column(length = 320, unique = true, nullable = false)
     protected String email;
+
+    @Column(nullable = false)
+    protected String password;
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
